@@ -1,0 +1,12 @@
+
+<html>
+    <head><title>The Great Collider</title></head>
+    <body><form action="/collider" method="POST" enctype="multipart/form-data">
+        <input name="files" type="file" multiple />
+        <input type="submit" name="doit" />
+    </form></body>
+    <p>I need two PDF files. One that looks like
+       <a href="letter.pdf">this one</a>, and another that doesn't. The
+       catch is that the two files you upload must have the same SHA1 hash.
+    </p>
+</html>

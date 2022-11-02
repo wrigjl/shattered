@@ -65,12 +65,12 @@ def collider():
 
     # Do they look sufficiently the same? Or sufficiently different?
 
-    target_gray = target_image.convert("L")
+    target_gray = target_image
 
     alikes = []
 
     try:
-        alike = compare_images(target_image, im1, target_gray)
+        alike = compare_images(target_image, im1, target_gray, im1)
         print(f"alike1={alike}")
         if alike >= 0.99:
             goodOne = im1
@@ -82,7 +82,7 @@ def collider():
     alikes.append(alike)
 
     try:
-        alike = compare_images(target_image, im2, target_gray)
+        alike = compare_images(target_image, im2, target_gray, im2)
         print(f"alike2={alike}")
         if alike >= 0.99 and goodOne is None:
             goodOne = im2
@@ -104,7 +104,7 @@ def collider():
 
     # Similiarity should be transitive, right? Just check it and make sure.
     try:
-        if compare_images(im1, im2) >= 0.92:
+        if compare_images(im1, im2, im1, im2) >= 0.92:
             save_them(files[0], files[1])
             return "Sorry, your images are too similiar to each other"
     except ImageComparisonException as e:
@@ -165,9 +165,11 @@ def image_parse(file):
 
         # render it into an image per page
         r = subprocess.call(['gs',
-                               '-r100',
-                               '-sDEVICE=png16m',
+                               '-r300',
+                               '-sDEVICE=pnggray',
                                '-dSAFER',
+                               '-dNOPAUSE',
+                               '-dBATCH',
                                '-o',
                                os.path.join(tmpdir, 'page-%04d.png'),
                                '-'],
